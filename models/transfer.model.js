@@ -1,0 +1,1 @@
+const Transfer = mongoose.model('Transfer', transferSchema)

@@ -7,6 +7,47 @@
 var app = require('../app');
 var debug = require('debug')('xender-ish-api:server');
 var http = require('http');
+const { exec } = require('child_process');
+var logger = require('morgan');
+
+
+/**
+ * Load the local env if on development server
+ */
+
+if (app.get('env') === 'development') {
+  require('dotenv').config();
+}
+
+
+/**
+ * Set the default timezone before continuing
+ */
+
+try {
+  exec(`env TZ='${process.env.TZ}'`);
+  console.log(`App Timezone is configured to ${process.env.TZ}`);
+} catch (error) {
+  console.log(`App Timezone configuration failed.`);
+  console.log(error);
+}
+
+
+/**
+ * Start the mongod and mongo services if on development server
+ */
+
+if (app.get('env') === 'development') {
+  try {
+    exec(`mongod`);
+    exec(`mongo`);
+    console.log(`App is connected to local Mongo DB`);
+  } catch (error) {
+    console.log(`Mongo DB setup failed.`);
+    console.log(error);
+  }
+}
+
 
 /**
  * Get port from environment and store in Express.
@@ -15,11 +56,13 @@ var http = require('http');
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
+
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -28,6 +71,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
 
 /**
  * Normalize a port into a number, string, or false.

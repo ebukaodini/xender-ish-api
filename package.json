@@ -4,6 +4,7 @@
   "description": "The backend application for xender-ish",
   "private": true,
   "scripts": {
+    "test": "grunt test",
     "start": "node ./bin/www"
   },
   "repository": {
@@ -17,12 +18,21 @@
   "author": "Ebuka Odini <ebukaodini@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.932.0",
     "cloudinary": "^1.26.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
+    "formidable": "^1.2.2",
+    "mongoose": "^5.12.14",
     "morgan": "~1.9.1",
-    "multiparty": "^4.2.2"
+    "multiparty": "^4.2.2",
+    "node-cron": "^3.0.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.4.1",
+    "grunt-mocha-cli": "^7.0.0",
+    "mocha": "^8.4.0"
   }
 }
