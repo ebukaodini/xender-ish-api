@@ -20,5 +20,5 @@ module.exports = authSchema = new Schema({
    * A timestamp as to know when the token was created
    * tokens would expire after 5 minutes
    */
-  timestamp: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: Date.now() }
 });

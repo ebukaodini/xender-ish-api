@@ -38,7 +38,14 @@ app.use(function (req, res, next) {
 
   form.parse(req, function (err, fields, files) {
     if (err) console.error(`Multiparty Middleware Error: ${err.message}`);
-    req.body = fields;
+
+    // parse fields
+    for (const key in fields) {
+      if (Object.hasOwnProperty.call(fields, key)) {
+        req.body[key] = fields[key][0];
+      }
+    }
+    console.log(files);
     req.files = files;
     next();
   });

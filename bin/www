@@ -8,7 +8,6 @@ var app = require('../app');
 var debug = require('debug')('xender-ish-api:server');
 var http = require('http');
 const { exec } = require('child_process');
-var logger = require('morgan');
 
 
 /**
@@ -41,7 +40,7 @@ if (app.get('env') === 'development') {
   try {
     exec(`mongod`);
     exec(`mongo`);
-    console.log(`App is connected to local Mongo DB`);
+    console.log(`App is running on a local instance of Mongo DB`);
   } catch (error) {
     console.log(`Mongo DB setup failed.`);
     console.log(error);

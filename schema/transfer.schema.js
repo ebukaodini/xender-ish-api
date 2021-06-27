@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
+let mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 // String is shorthand for {type: String}
-const transferSchema = new Schema({
+module.exports = transferSchema = new Schema({
   /**
    * The transfer ID / upload ID
    */
@@ -10,7 +10,7 @@ const transferSchema = new Schema({
   /**
    * The sender's email
    */
-  sender: { type: String, required: true, unique: true },
+  sender: { type: String, required: true },
   /**
    * A list of recipients
    */
@@ -19,7 +19,7 @@ const transferSchema = new Schema({
       /**
        * The recipient email
        */
-      email: { type: String, required: true, unique: true },
+      email: { type: String, required: true },
       /**
        * A bool to indicate if the accessed the download link
        */
@@ -33,21 +33,22 @@ const transferSchema = new Schema({
   /**
    * The download link
    */
-  downloadLink: String,
+  link: {type: String, required: true},
   /**
    * A bool that indicates if this upload is protected by a password
    */
-  locked: { type: Boolean, default: false },
+  secure: { type: Boolean, default: false },
   /**
    * The user's encrypted password
    */
-  lockPassword: String,
+  securePassword: String,
   /**
    * A list of uploaded file objects
    */
   files: [
     {
-      filesize: Schema.Types.Decimal128,
+      index: Number,
+      filesize: Number,
       filetype: String,
       filename: String,
       filepath: String,
@@ -56,5 +57,5 @@ const transferSchema = new Schema({
   /**
    * Timestamp of upload
    */
-  timestamp: { type: Date, default: Date.now },
+  timestamp: { type: Date, default: Date.now() },
 });

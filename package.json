@@ -18,6 +18,7 @@
   "author": "Ebuka Odini <ebukaodini@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "aes256": "^1.1.0",
     "aws-sdk": "^2.932.0",
     "cloudinary": "^1.26.0",
     "cookie-parser": "~1.4.4",
@@ -25,6 +26,7 @@
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
     "formidable": "^1.2.2",
+    "keygen": "^0.3.1",
     "mongoose": "^5.12.14",
     "morgan": "~1.9.1",
     "multiparty": "^4.2.2",
