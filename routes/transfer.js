@@ -1,17 +1,39 @@
 let express = require('express');
-var router = express.Router();
-var keygen = require('keygen');
-var cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+const router = express.Router();
+const keygen = require('keygen');
+const { uploadToS3 } = require('../lib/S3');
 const { addTransfer } = require('../models/transfer.model');
 const { generatePassword, encrypt, success, error } = require('../lib/utils');
 
-// configuring cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUDNAME,
-  api_key: process.env.CLOUDINARY_APIKEY,
-  api_secret: process.env.CLOUDINARY_APISECRET,
-  secure: true
-});
+
+const uploadFiles = async (files) => {
+  try {
+
+    // return files.forEach
+    // return 
+    files.map(async file => {
+      await uploadToS3(file.filepath)
+        .then((result) => {
+          // fs.unlink(file.filepath);
+          console.log('File Upload Result', result);
+          // file.filepath = result.url;
+          // file['key'] = result.key;
+          // file['versionId'] = result.versionId;
+          return file;
+        })
+        .catch((err) => {
+          throw err;
+          // console.log(err.me);
+          return false;
+        });
+    });
+    return false;
+  } catch (error) {
+    console.error(err.message);
+    // throw error;
+  }
+}
 
 /**
  * Route to upload files
@@ -39,13 +61,32 @@ router.post('/upload', async (req, res) => {
       count++;
     });
 
-    // TODO
-    // transfer the file to cloudinary or aws
-    let resp = await addTransfer(req.body.sender, JSON.parse(req.body.recipients), files, link, req.body.message, hash);
-    if (resp == true) success(res, 'Transfer completed successfully', {
-      downloadlink: weblink,
-    });
-    else error(res, 'Transfer failed, please try again');
+    // foreach file in files
+    // upload file data to s3
+    // get the url of the uploaded file
+    // update the filepath property of the file
+
+    await uploadFiles(files)
+      .then(async (data) => {
+
+        // if all files were uploaded
+        if (data != false) {
+          let resp = await addTransfer(req.body.sender, JSON.parse(req.body.recipients), data, link, req.body.message, hash);
+          if (resp == true)
+            success(res, 'Transfer completed successfully', {
+              downloadlink: weblink,
+            });
+          else
+            error(res, 'Transfer failed, please try again');
+        }
+        else
+          error(res, 'Transfer failed, please try again!');
+
+      })
+      .catch(err => {
+        throw err;
+      });
+
   } catch (err) {
     console.error(err)
     error(res, err.message);

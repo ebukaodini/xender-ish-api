@@ -3,7 +3,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var multiparty = require('multiparty');
-var cloudinary = require('cloudinary').v2;
 
 // import cronjobs
 require('./routes/cronjobs');
@@ -28,6 +27,7 @@ app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Custom-Header, AuthToken");
   res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, PATCH, DELETE");
   res.setHeader("Accept", "*/*");
+  
   next();
 });
 
@@ -45,7 +45,7 @@ app.use(function (req, res, next) {
         req.body[key] = fields[key][0];
       }
     }
-    console.log(files);
+    // console.log(files);
     req.files = files;
     next();
   });
